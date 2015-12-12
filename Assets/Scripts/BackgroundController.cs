@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class BackgroundController : MonoBehaviour {
-	Object background;
 	public float scrollSpeed;
+	CameraProperties props;
+	Object background;
 	List<GameObject> backgrounds;
 	List<Vector3> startPositions;
-	Vector3 viewPort, bottomLeft, topRight;
-	float camHeight, camWidth;
-	// Use this for initialization
+
 	void Awake () { 
-		updateCameraProperties ();
+		props = new CameraProperties();
 		Debug.Log ("Trying to load Background from Resources/Background");
 		if (!(background = Resources.Load ("Background", typeof(GameObject)))) {
 			Debug.LogError("Couldn't load background");
@@ -19,30 +18,16 @@ public class BackgroundController : MonoBehaviour {
 		backgrounds = new List<GameObject>();
 		startPositions = new List<Vector3> ();
 	}
-
-	void updateCameraProperties () {
-		viewPort = new Vector3(0,0,0);
-		bottomLeft = Camera.main.ViewportToWorldPoint(viewPort);
-		viewPort.Set(1,1,1);
-		topRight = Camera.main.ViewportToWorldPoint(viewPort);
-		Debug.Log ("Camera botLeft : " + bottomLeft);
-		Debug.Log ("Camera topRight : " + topRight);
-		camHeight = topRight.y - bottomLeft.y;
-		camWidth = topRight.x - bottomLeft.x;
-	}
-
-	Vector3 getNewBGScale (){
-		return new Vector3 (camHeight, camHeight, 1);
-	}
-
-
+	
 	void Start(){
-		int numCopies = Mathf.CeilToInt (camWidth/camHeight)+2;
+		int numCopies = Mathf.CeilToInt (props.CamWidth/props.CamHeight)+2; // we need n+2 copies of background object, where n is the screen height
+		// 1 |           [play area]             | 1 (left and right to be sure that we won't show blue unity bg when moving ours)
+		//   | n obj. with len = props.camHeight |
 		for (int i = 0; i < numCopies; i++) {
-			startPositions.Add(new Vector3(bottomLeft.x+(i-0.5f)*camHeight , 0, 0 ));
+			startPositions.Add(new Vector3(props.BottomLeft.x+(i-0.5f)*props.CamHeight , 0, 0 ));
 			Debug.Log("Creating a new background object at : " + startPositions[i]);
 			backgrounds.Add(Instantiate( background, startPositions[i], Quaternion.identity ) as GameObject); 
-			backgrounds[i].transform.localScale = getNewBGScale();
+			backgrounds[i].transform.localScale = props.GetBackgroundScale;
 		}
 	}
 
@@ -50,7 +35,7 @@ public class BackgroundController : MonoBehaviour {
 	void Update () {
 		int i = 0;
 		foreach (GameObject bg in backgrounds) {
-			float newPosMult = Mathf.Repeat (Time.time * scrollSpeed, camHeight);
+			float newPosMult = Mathf.Repeat (Time.time * scrollSpeed, props.CamHeight);
 			bg.transform.position = startPositions[i] + Vector3.left * newPosMult;
 			i++;
 		}

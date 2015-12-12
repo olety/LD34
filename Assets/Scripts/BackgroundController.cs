@@ -12,7 +12,7 @@ public class BackgroundController : MonoBehaviour {
 	// Use this for initialization
 	void Awake () { 
 		updateCameraProperties ();
-		Debug.Log ("Trying to load Background from Prefabs/Background");
+		Debug.Log ("Trying to load Background from Resources/Background");
 		if (!(background = Resources.Load ("Background", typeof(GameObject)))) {
 			Debug.LogError("Couldn't load background");
 		}
@@ -39,8 +39,8 @@ public class BackgroundController : MonoBehaviour {
 	void Start(){
 		int numCopies = Mathf.CeilToInt (camWidth/camHeight)+2;
 		for (int i = 0; i < numCopies; i++) {
-			startPositions.Add(new Vector3(bottomLeft.x+(i-1)*camHeight , 0, 0 ));
-			Debug.Log("Creating a new background object at : " + startPositions);
+			startPositions.Add(new Vector3(bottomLeft.x+(i-0.5f)*camHeight , 0, 0 ));
+			Debug.Log("Creating a new background object at : " + startPositions[i]);
 			backgrounds.Add(Instantiate( background, startPositions[i], Quaternion.identity ) as GameObject); 
 			backgrounds[i].transform.localScale = getNewBGScale();
 		}

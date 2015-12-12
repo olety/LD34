@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
 public class HeroController : MonoBehaviour {
 	public CameraProperties camProps;
-	public Image hpBar;
-	public Image apBar;
+	public GameObject hpBar;
+	public GameObject apBar;
 	public float horSpeed;
 	public float spriteLen = 1f;
 	public float bulletLen = 0.5f;
@@ -18,7 +17,7 @@ public class HeroController : MonoBehaviour {
 	
 	Rigidbody2D rigidbody;
 	Object Bullet;
-
+	Vector3 hpScale, apScale;
 	float abilityPoints;
 
 	public float AbilityPoints {
@@ -58,11 +57,25 @@ public class HeroController : MonoBehaviour {
 	}
 
 	void hpBarUpdate(){
-		this.hpBar.fillAmount = this.health / this.maxHealth; // val=0..1, val = health/maxHealth
+		this.hpBar.transform.localScale = new Vector3(hpScale.x*this.health / this.maxHealth, 
+		                                              hpScale.y, 
+		                                              hpScale.z); 
+		Vector3 newPos = new Vector3 (this.hpBar.transform.localPosition.x,
+		                              -1f+(this.health / this.maxHealth),
+		                              this.hpBar.transform.localPosition.z);
+		Debug.Log ("Setting new position of hpbar to " + newPos);
+		this.hpBar.transform.localPosition = newPos;
 	}
 	
 	void apBarUpdate(){
-		this.apBar.fillAmount = this.abilityPoints / this.maxAbilityPoints; // val=0..1, val = ap/maxAP
+		this.apBar.transform.localScale = new Vector3(apScale.x*this.abilityPoints / this.maxAbilityPoints, 
+		                                              apScale.y, 
+		                                              apScale.z); 
+		Vector3 newPos = new Vector3 (this.apBar.transform.localPosition.x,
+		                              -1f+(this.abilityPoints / this.maxAbilityPoints),
+		                              this.apBar.transform.localPosition.z);
+		Debug.Log ("Setting new position of apbar to " + newPos);
+		this.apBar.transform.localPosition = newPos;
 	}
 
 	void Awake () { 
@@ -71,6 +84,8 @@ public class HeroController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		hpScale = hpBar.transform.localScale;
+		apScale = apBar.transform.localScale;
 		abilityPoints = maxAbilityPoints;
 		health = maxHealth;
 		if (!(Bullet = Resources.Load ("Bullet", typeof(GameObject)))) {

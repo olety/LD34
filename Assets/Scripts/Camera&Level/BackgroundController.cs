@@ -25,14 +25,26 @@ public class BackgroundController : MonoBehaviour {
 		//   | n obj. with len = props.camHeight |
 		for (int i = 0; i < numCopies; i++) {
 			startPositions.Add(new Vector3(props.BottomLeft.x+(i-0.5f)*props.CamHeight , 0, 0 ));
-			Debug.Log("Creating a new background object at : " + startPositions[i]);
+//			Debug.Log("Creating a new background object at : " + startPositions[i]);
 			backgrounds.Add(Instantiate( background, startPositions[i], Quaternion.identity ) as GameObject); 
 			backgrounds[i].transform.localScale = props.GetBackgroundScale;
 		}
+		InvokeRepeating ("updateStartPositions", 1.0f, 1.0f);
+	}
+
+	void updateStartPositions(){
+		for ( int i = 0; i < startPositions.Count; i++){
+			updateStartPosition(i);
+		}
+	}
+
+	void updateStartPosition(int i){
+		startPositions[i] = new Vector3(props.BottomLeft.x+(i-0.5f)*props.CamHeight , 0, 0 );
 	}
 
 	// Update is called once per frame
 	void Update () {
+		props.updateCameraProperties ();
 		int i = 0;
 		foreach (GameObject bg in backgrounds) {
 			float newPosMult = Mathf.Repeat (Time.time * scrollSpeed, props.CamHeight);

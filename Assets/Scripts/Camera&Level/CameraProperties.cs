@@ -48,8 +48,8 @@ public class CameraProperties {
 		bottomLeft = Camera.main.ViewportToWorldPoint(viewPort);
 		viewPort.Set(1,1,1);
 		topRight = Camera.main.ViewportToWorldPoint(viewPort);
-		Debug.Log ("Camera botLeft : " + bottomLeft);
-		Debug.Log ("Camera topRight : " + topRight);
+//		Debug.Log ("Camera botLeft : " + bottomLeft);
+//		Debug.Log ("Camera topRight : " + topRight);
 		camHeight = topRight.y - bottomLeft.y;
 		camWidth = topRight.x - bottomLeft.x;
 	}

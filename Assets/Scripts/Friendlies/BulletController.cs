@@ -16,13 +16,32 @@ public class BulletController : MonoBehaviour {
 		velocity.x = speed;
 		this.rigidbody.velocity = velocity;
 	}
+
+	public void changeColor(){
+
+	}
+
+	public void chngeColorRandom(float deltaTime){
 	
+	}
+
 	// Update is called once per frame
 	void Update () {
-		Debug.Log ("Bullet pos : " + this.transform.position);
+		props.updateCameraProperties ();
+//		Debug.Log ("Bullet pos : " + this.transform.position);
 		if (this.transform.position.x > props.TopRight.x ) {
 			Debug.Log("Bullet is out of the screen, killing it");
 			Destroy(this.gameObject);
+		}
+	}
+	void OnCollisionEnter2D(Collision2D coll) {
+		if (coll.gameObject.tag == "Enemy") {
+			coll.gameObject.SendMessage("decSize", damage);
+			Destroy (this.gameObject);
+		}
+		if (coll.gameObject.tag == "Pickup") {
+			Destroy (coll.gameObject);
+			Destroy (this.gameObject);
 		}
 	}
 }

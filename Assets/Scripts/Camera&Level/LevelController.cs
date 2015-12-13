@@ -35,6 +35,26 @@ public class LevelController : MonoBehaviour {
 
 	}
 
+	public void pauseGame(){
+		Debug.Log ("Pausing game");
+		Time.timeScale = 0f;
+	}
+
+	public void unPauseGame(){
+		Debug.Log ("Unpausing game");
+		Time.timeScale = 1f;
+	}
+
+	public void slowMo( float slownessRatio ){
+		Debug.Log ("Enabling SlowMo , ratio = " + slownessRatio);
+		Time.timeScale = slownessRatio;
+	}
+
+	public void unSlowMo (){
+		Debug.Log ("Disabling SlowMo");
+		Time.timeScale = 1f;
+	}
+
 	public void LoadScene ( string sceneName ){
 		Debug.Log ("Load requested for scene " + sceneName);
 		Application.LoadLevel (sceneName);

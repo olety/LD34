@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour {
 	void Update () {
 		pos.x = target.position.x+offsetXRatio*props.CamWidth;
 //		Debug.Log("Setting camera position to " + pos);
+//		Debug.Log (target.position);
 		this.transform.position = pos;
 	}
 

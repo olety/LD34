@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BulletController : MonoBehaviour {
 	public float goingRight = 1.0f;
-	public float damage = 50f;
+	public float damage = 30f;
 	public float speed = 8f;
 	CameraProperties props;
 	Rigidbody2D rigidbody;
@@ -40,7 +40,7 @@ public class BulletController : MonoBehaviour {
 			Destroy (this.gameObject);
 		}
 		if (coll.gameObject.tag == "Pickup") {
-			Destroy (coll.gameObject);
+//			Destroy (coll.gameObject);
 			Destroy (this.gameObject);
 		}
 	}

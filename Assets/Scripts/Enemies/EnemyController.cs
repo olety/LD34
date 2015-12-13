@@ -2,18 +2,19 @@
 using System.Collections;
 
 public class EnemyController : MonoBehaviour {
-	public float damage;
 	public float minPickups, maxPickups;
 	public float minPickupOffset, maxPickupOffset;
 	public string pickupName = "Pickup";
-	float numPickups;
 	static Object pickup; 
 
+	float numPickups;
+	float damage;
 
 	// Use this for initialization
 	void Start () {
 		setSizeToScaleRatio ();
 		setRandomSize ();
+		damage = size;
 		numPickups = Random.Range (minPickups, maxPickups);
 		if (!(pickup = Resources.Load (pickupName, typeof(GameObject)))) {
 			Debug.LogError("Couldn't load a pickup object");
@@ -44,6 +45,7 @@ public class EnemyController : MonoBehaviour {
 		Debug.Log ("Enemy size set requested, amount = " + amount);
 		size = Mathf.Clamp (amount, minSize, maxSize);
 		Debug.Log ("Set Enemy size to : " + this.size);
+		damage = size;
 		this.updateSize ();
 	}
 	

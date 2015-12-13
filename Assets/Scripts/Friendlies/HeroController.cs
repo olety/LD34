@@ -12,7 +12,8 @@ public class HeroController : MonoBehaviour {
 	Animator anim;
 	// Animation stuff end
 	
-	Rigidbody2D rigidbody;
+	public Rigidbody2D rigidbody;
+	public Transform parentTransform;
 	BoxCollider2D collider;
 	PolygonCollider2D spikeCollider;
 	Vector2 spikeSize;
@@ -104,9 +105,17 @@ public class HeroController : MonoBehaviour {
 	
 	
 	void Awake () { 
-		this.rigidbody = this.GetComponent<Rigidbody2D> ();
-		this.collider = this.gameObject.GetComponent<BoxCollider2D> ();
-		//		this.anim = this.gameObject.GetComponent<Animator> ();
+//		if ( (this.rigidbody = this.GetComponent<Rigidbody2D> ()) ){
+//			Debug.LogError("Couldnt load rigidbody2D in HeroController");
+//		}
+
+		if ((this.collider = this.gameObject.GetComponent<BoxCollider2D> ()) == null) {
+			Debug.LogError("Couldnt load collider in HeroController");
+		}
+
+		if ((this.anim = this.gameObject.GetComponentInParent<Animator> ()) == null) {
+			Debug.LogError("Couldnt load animator in HeroController");
+		}
 		this.fill = this.transform.Find ("Fill");
 		sizeToScaleRatio = this.transform.localScale.x / startSize;
 		collSize = new Vector2 (this.collider.bounds.size.x, this.collider.bounds.size.y);
@@ -133,12 +142,13 @@ public class HeroController : MonoBehaviour {
 			if ( size > spikeSizeCost && firingSpike == false){
 				firingSpike = true; // set that we're firing a spike
 			} 
-		}/* else if ( Input.GetButtonDown("Slam")){
+		} else if ( Input.GetButtonDown("Slam")){
 			Debug.Log ("Slam button pressed, size = " + size + " cost = " + slamSizeCost);
 			if ( size > slamSizeCost && slamming == false){
+				anim.SetTrigger("Slam");
 				slamming = true;
 			}
-		}*/
+		}
 		
 		//		if ( Input.GetKeyDown(KeyCode.Space) ){
 		//			decSize(50.0f);
@@ -159,7 +169,7 @@ public class HeroController : MonoBehaviour {
 		                               0);
 		fireSpikeAtPos (spikePos);
 	}
-	/*
+
 	void slamAtPos( Vector3 pos ){
 		Debug.Log ("Slam");
 	}
@@ -205,9 +215,13 @@ public class HeroController : MonoBehaviour {
 			TurnOnFill ();
 			Invoke ("turnOffFill", dur);
 		}
-		Invoke("level.unSlowMo", dur);
+		Invoke("unSlowMo", dur);
 	}
-*/
+
+	void unSlowMo (){
+		level.unSlowMo();
+	}
+
 	void FixedUpdate () {
 		
 		this.rigidbody.velocity = velocity;
@@ -217,10 +231,10 @@ public class HeroController : MonoBehaviour {
 			decSize (spikeSizeCost);
 			fireSpike ();
 			//			Time.timeScale = 0.001f;
-		}/* else if (slamming) {
+		} else if (slamming) {
 			slamming = false;
 			slam (slamSizeCost, this.transform.position, 1f, 0.3f);
-		}*/
+		}
 	}
 	
 	void OnCollisionEnter2D(Collision2D coll) {

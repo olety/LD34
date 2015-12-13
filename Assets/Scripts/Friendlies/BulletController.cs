@@ -21,7 +21,7 @@ public class BulletController : MonoBehaviour {
 
 	}
 
-	public void chngeColorRandom(float deltaTime){
+	public void changeColorRandom(float deltaTime){
 	
 	}
 
@@ -41,7 +41,7 @@ public class BulletController : MonoBehaviour {
 		}
 		if (coll.gameObject.tag == "Pickup") {
 //			Destroy (coll.gameObject);
-			Destroy (this.gameObject);
+//			Destroy (this.gameObject);
 		}
 	}
 }

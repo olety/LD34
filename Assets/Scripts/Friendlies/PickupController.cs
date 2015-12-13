@@ -4,15 +4,21 @@ using System.Collections;
 
 
 public class PickupController : MonoBehaviour {
-	public enum pickupType { Simple, BonusSize, DoubleShot };
+	public enum pickupType { Null, Simple, Transformation };
 	pickupType type;
 	SpriteRenderer sprite;
 	Color color;
 
-	static T GetRandomEnum<T>()
+	public static T GetRandomEnum<T>()
 	{
 		System.Array A = System.Enum.GetValues(typeof(T));
-		T V = (T)A.GetValue(UnityEngine.Random.Range(0,A.Length));
+		T V;
+		if (A.Length >= 2) {
+			V = (T)A.GetValue (UnityEngine.Random.Range (1, A.Length));
+		} else {
+			V = (T)A.GetValue (UnityEngine.Random.Range (0, A.Length));
+		}
+		Debug.Log ("Getting random enums for " + A + " size = " + A.Length + "Returning random enum " + V );
 		return V;
 	}
 
@@ -38,7 +44,7 @@ public class PickupController : MonoBehaviour {
 		                   (Random.Range (0f, 250f))/255, // in the form (0..1,0..1,0..1)
 		                   (Random.Range (0f, 250f))/255,  // so we take a random from 0.250 (255 would be all white) and normalize it
 		                   255); // opacity. for this to be seen, it has to be 255
-		Debug.Log("Changing pickup color to " + color);
+//		Debug.Log("Changing pickup color to " + color);
 		this.sprite.color = color;
 	}
 	

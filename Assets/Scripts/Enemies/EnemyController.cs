@@ -9,11 +9,13 @@ public class EnemyController : MonoBehaviour {
 	public enum enemyType { Null, Enemy1 };
 	public enemyType type = enemyType.Enemy1;
 
+	CameraProperties props;
 	float numPickups;
 	float damage;
 
 	// Use this for initialization
 	void Start () {
+		props = new CameraProperties ();
 		setSizeToScaleRatio ();
 		setRandomSize ();
 		damage = size;
@@ -25,7 +27,10 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (this.transform.position.y < props.BottomLeft.y || this.transform.position.y > props.TopRight.y ) {
+			Debug.LogError("Enemy fell through the level. Killing it");
+			killThis();
+		}
 	}
 	
 //------------------SIZE-STUFF-START----------------------------------------

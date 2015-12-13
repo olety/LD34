@@ -56,6 +56,7 @@ public class LevelController : MonoBehaviour {
 	}
 
 	public void LoadScene ( string sceneName ){
+		unPauseGame ();
 		Debug.Log ("Load requested for scene " + sceneName);
 		Application.LoadLevel (sceneName);
 	}

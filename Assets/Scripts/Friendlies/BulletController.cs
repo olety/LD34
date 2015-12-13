@@ -3,13 +3,14 @@ using System.Collections;
 
 public class BulletController : MonoBehaviour {
 	public float goingRight = 1.0f;
-	public float damage = 30f;
+	public float damage = 25f;
 	public float speed = 8f;
 	CameraProperties props;
 	Rigidbody2D rigidbody;
 	Vector2 velocity;
 	// Use this for initialization
 	void Start () {
+		damage = Random.Range (10f, 40f);
 		props = new CameraProperties();
 		this.rigidbody = this.GetComponent<Rigidbody2D> ();
 		this.velocity = new Vector2 ();

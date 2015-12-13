@@ -7,6 +7,7 @@ public class CameraProperties {
 
 	public Vector3 ViewPort {
 		get {
+			updateCameraProperties();
 			return viewPort;
 		}
 	}
@@ -15,6 +16,7 @@ public class CameraProperties {
 
 	public Vector3 BottomLeft {
 		get {
+			updateCameraProperties();
 			return bottomLeft;
 		}
 	}
@@ -23,6 +25,7 @@ public class CameraProperties {
 
 	public Vector3 TopRight {
 		get {
+			updateCameraProperties();
 			return topRight;
 		}
 	}
@@ -31,6 +34,7 @@ public class CameraProperties {
 
 	public float CamHeight {
 		get {
+			updateCameraProperties();
 			return camHeight;
 		}
 	}
@@ -39,6 +43,7 @@ public class CameraProperties {
 
 	public float CamWidth {
 		get {
+			updateCameraProperties();
 			return camWidth;
 		}
 	}
@@ -60,6 +65,7 @@ public class CameraProperties {
 
 	public Vector3 GetBackgroundScale {
 		get {
+			updateCameraProperties();
 			return getNewBackgroundScale();
 		}
 	}

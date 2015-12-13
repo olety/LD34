@@ -44,7 +44,7 @@ public class BackgroundController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		props.updateCameraProperties ();
+//		props.updateCameraProperties ();
 		int i = 0;
 		foreach (GameObject bg in backgrounds) {
 			float newPosMult = Mathf.Repeat (Time.time * scrollSpeed, props.CamHeight);

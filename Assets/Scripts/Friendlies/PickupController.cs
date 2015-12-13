@@ -8,6 +8,7 @@ public class PickupController : MonoBehaviour {
 	pickupType type;
 	SpriteRenderer sprite;
 	Color color;
+	CameraProperties props;
 
 	public static T GetRandomEnum<T>()
 	{
@@ -18,12 +19,13 @@ public class PickupController : MonoBehaviour {
 		} else {
 			V = (T)A.GetValue (UnityEngine.Random.Range (0, A.Length));
 		}
-		Debug.Log ("Getting random enums for " + A + " size = " + A.Length + "Returning random enum " + V );
+		Debug.Log ("Getting random enums for " + A + " size = " + A.Length + " Returning random enum " + V );
 		return V;
 	}
 
 	// Use this for initialization
 	void Start () {
+		props = new CameraProperties();
 		setSizeToScaleRatio ();
 		type = GetRandomEnum<pickupType> ();
 		sprite = this.GetComponent<SpriteRenderer> ();
@@ -33,7 +35,7 @@ public class PickupController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (this.transform.position.y < -20 ) {
+		if (this.transform.position.y < props.BottomLeft.y || this.transform.position.y > props.TopRight.y ) {
 			Debug.LogError("Pickup fell through the level. Killing it");
 			Destroy(this.gameObject);
 		}
@@ -58,16 +60,16 @@ public class PickupController : MonoBehaviour {
 		sizeToScaleRatio = HeroController.SizeToScaleRatio*16; 
 	}
 	public void setSize ( float amount ){
-		Debug.Log ("Pickup size set requested, amount = " + amount);
+//		Debug.Log ("Pickup size set requested, amount = " + amount);
 		size = Mathf.Clamp (amount, minSize, maxSize);
-		Debug.Log ("Set pickup size to : " + this.size);
+//		Debug.Log ("Set pickup size to : " + this.size);
 		this.updateSize ();
 	}
 
 	void updateSize(){
 //		Debug.Log ("Size : " + size + "ratio : " + sizeToScaleRatio);
 		Vector3 newScale = new Vector3 (size * sizeToScaleRatio, size * sizeToScaleRatio, 0);
-		Debug.Log ("Pickup size update requested. NewScale = " + newScale);
+//		Debug.Log ("Pickup size update requested. NewScale = " + newScale);
 		this.transform.localScale = newScale;
 	}
 
@@ -86,8 +88,8 @@ public class PickupController : MonoBehaviour {
 			pickupMessage msg;
 			msg.size = this.size;
 			msg.type = this.type;
-			Debug.Log("Pickup size : " + this.size);
-			Debug.Log("Sending a message : " + msg.size);
+//			Debug.Log("Pickup size : " + this.size);
+			Debug.Log("Sending a message : " + msg);
 			coll.gameObject.SendMessage("processPickup", msg);
 			Destroy (this.gameObject);
 		}

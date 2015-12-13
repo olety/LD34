@@ -3,7 +3,8 @@ using System.Collections;
 
 public class LevelController : MonoBehaviour {
 	float screenWidth;
-
+	public Vector2 minLevelCoords = new Vector2(-200,-200);
+	public Vector2 maxLevelCoords = new Vector2(200,200);
 	public float ScreenWidth {
 		get {
 			return screenWidth;

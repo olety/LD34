@@ -47,9 +47,18 @@ public class CameraProperties {
 			return camWidth;
 		}
 	}
-	
+
+	Vector2 camCenter;
+
+	public Vector2 CamCenter {
+		get {
+			updateCameraProperties();
+			return camCenter;
+		}
+	}
+
 	public void updateCameraProperties () {
-		viewPort = new Vector3(0,0,0);
+		viewPort.Set(0,0,0);
 		bottomLeft = Camera.main.ViewportToWorldPoint(viewPort);
 		viewPort.Set(1,1,1);
 		topRight = Camera.main.ViewportToWorldPoint(viewPort);
@@ -57,10 +66,11 @@ public class CameraProperties {
 //		Debug.Log ("Camera topRight : " + topRight);
 		camHeight = topRight.y - bottomLeft.y;
 		camWidth = topRight.x - bottomLeft.x;
+		camCenter.Set( (topRight.x - camWidth / 2), (topRight.y - camHeight / 2) );
 	}
 
 	Vector3 getNewBackgroundScale (){
-		return new Vector3 (camHeight, camHeight, 1);
+		return new Vector3 (camWidth, camHeight, 1);
 	}
 
 	public Vector3 GetBackgroundScale {
@@ -71,6 +81,9 @@ public class CameraProperties {
 	}
 
 	public CameraProperties(){
+		viewPort = new Vector2 ();
+		camCenter = new Vector2 ();
 		updateCameraProperties();
 	}
+
 }

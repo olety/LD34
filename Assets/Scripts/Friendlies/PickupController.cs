@@ -5,10 +5,11 @@ using System.Collections;
 
 public class PickupController : MonoBehaviour {
 	public enum pickupType { Null, Simple, Transformation };
+	public LevelController level;
 	pickupType type;
 	SpriteRenderer sprite;
 	Color color;
-	CameraProperties props;
+//	CameraProperties props;
 
 	public static T GetRandomEnum<T>()
 	{
@@ -19,13 +20,13 @@ public class PickupController : MonoBehaviour {
 		} else {
 			V = (T)A.GetValue (UnityEngine.Random.Range (0, A.Length));
 		}
-		Debug.Log ("Getting random enums for " + A + " size = " + A.Length + " Returning random enum " + V );
+//		Debug.Log ("Getting random enums for " + A + " size = " + A.Length + " Returning random enum " + V );
 		return V;
 	}
 
 	// Use this for initialization
 	void Start () {
-		props = new CameraProperties();
+//		props = new CameraProperties();
 		setSizeToScaleRatio ();
 		type = GetRandomEnum<pickupType> ();
 		sprite = this.GetComponent<SpriteRenderer> ();
@@ -35,8 +36,11 @@ public class PickupController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (this.transform.position.y < props.BottomLeft.y || this.transform.position.y > props.TopRight.y ) {
-			Debug.LogError("Pickup fell through the level. Killing it");
+		if (this.transform.position.x < level.minLevelCoords.x ||
+		    this.transform.position.y < level.minLevelCoords.y ||
+		    this.transform.position.x > level.maxLevelCoords.x ||
+		    this.transform.position.y > level.maxLevelCoords.y  ) {
+			Debug.Log("Pickup fell through the level. Killing it");
 			Destroy(this.gameObject);
 		}
 	}
@@ -89,7 +93,7 @@ public class PickupController : MonoBehaviour {
 			msg.size = this.size;
 			msg.type = this.type;
 //			Debug.Log("Pickup size : " + this.size);
-			Debug.Log("Sending a message : " + msg);
+//			Debug.Log("Sending a message : " + msg);
 			coll.gameObject.SendMessage("processPickup", msg);
 			Destroy (this.gameObject);
 		}

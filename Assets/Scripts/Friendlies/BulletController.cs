@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BulletController : MonoBehaviour {
 	public float goingRight = 1.0f;
-	public float damage = 25f;
+	public float damage = 35f;
 	public float speed = 8f;
 	CameraProperties props;
 	Rigidbody2D rigidbody;
@@ -28,7 +28,6 @@ public class BulletController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		props.updateCameraProperties ();
 //		Debug.Log ("Bullet pos : " + this.transform.position);
 		if (this.transform.position.x > props.TopRight.x ) {
 			Debug.Log("Bullet is out of the screen, killing it");

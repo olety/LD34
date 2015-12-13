@@ -4,21 +4,24 @@ using System.Collections;
 public class EnemyController : MonoBehaviour {
 	public float minPickups, maxPickups;
 	public float minPickupOffset, maxPickupOffset;
+	public LevelController level;
 	public string pickupName = "Pickup";
 	static Object pickup; 
 	public enum enemyType { Null, Enemy1 };
 	public enemyType type = enemyType.Enemy1;
 
-	CameraProperties props;
+	GameObject pickupObject;
+//	CameraProperties props;
 	float numPickups;
-	float damage;
+//	float damage;
 
 	// Use this for initialization
 	void Start () {
-		props = new CameraProperties ();
+//		Debug.Log (level.minLevelCoords);
+//		props = new CameraProperties ();
 		setSizeToScaleRatio ();
 		setRandomSize ();
-		damage = size;
+//		damage = size;
 		numPickups = Random.Range (minPickups, maxPickups);
 		if (!(pickup = Resources.Load (pickupName, typeof(GameObject)))) {
 			Debug.LogError("Couldn't load a pickup object");
@@ -27,8 +30,11 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (this.transform.position.y < props.BottomLeft.y || this.transform.position.y > props.TopRight.y ) {
-			Debug.LogError("Enemy fell through the level. Killing it");
+		if ( this.transform.position.x < level.minLevelCoords.x ||
+		     this.transform.position.y < level.minLevelCoords.y ||
+		     this.transform.position.x > level.maxLevelCoords.x ||
+		     this.transform.position.y > level.maxLevelCoords.y  ) {
+			Debug.Log("Enemy fell through the level. Killing it");
 			killThis();
 		}
 	}
@@ -52,7 +58,7 @@ public class EnemyController : MonoBehaviour {
 //		Debug.Log ("Enemy size set requested, amount = " + amount);
 		size = Mathf.Clamp (amount, minSize, maxSize);
 //		Debug.Log ("Set Enemy size to : " + this.size);
-		damage = size;
+//		damage = size;
 		this.updateSize ();
 	}
 	
@@ -83,7 +89,8 @@ public class EnemyController : MonoBehaviour {
 		for (int i = 0; i < numPickups; i++) {
 			pickupPos.x = Random.Range(this.transform.position.x+minPickupOffset,
 			                           this.transform.position.x+maxPickupOffset);
-			Instantiate(pickup,pickupPos,Quaternion.identity);
+			pickupObject = Instantiate(pickup,pickupPos,Quaternion.identity) as GameObject;
+			pickupObject.GetComponent<PickupController>().level = level;
 		}
 	}
 

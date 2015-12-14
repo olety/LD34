@@ -103,7 +103,14 @@ public class HeroController : MonoBehaviour {
 
 	
 	float size;
-	
+	float score = 0f;
+
+	public float Score {
+		get {
+			return score;
+		}
+	}
+
 	public float Size {
 		get {
 			return size;
@@ -137,6 +144,9 @@ public class HeroController : MonoBehaviour {
 		if (amount <= 0f) {
 			level.Lose();
 			return;
+		}
+		if (score < amount) {
+			score = amount;
 		}
 		this.size = Mathf.Clamp (amount, 0, this.maxSize);
 		this.updateSize ();
@@ -520,65 +530,66 @@ public class HeroController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Check if it's inside the cam boundaries
+		if (Time.timeScale != 0f) {
+			//Check if it's inside the cam boundaries
 		
-		if (this.transform.position.x < level.minLevelCoords.x ||
-		    this.transform.position.y < level.minLevelCoords.y ||
-		    this.transform.position.x > level.maxLevelCoords.x ||
-		    this.transform.position.y > level.maxLevelCoords.y  ) {
-			Debug.LogError ("Player fell through the level. Killing it");
-			killThis ();
-		}
+			if (this.transform.position.x < level.minLevelCoords.x ||
+				this.transform.position.y < level.minLevelCoords.y ||
+				this.transform.position.x > level.maxLevelCoords.x ||
+				this.transform.position.y > level.maxLevelCoords.y) {
+				Debug.LogError ("Player fell through the level. Killing it");
+				killThis ();
+			}
 
 
-		//Letter color stuff
-		colorTimeElapsed += Time.deltaTime;	
-		attackTimeElapsed += Time.deltaTime;
+			//Letter color stuff
+			colorTimeElapsed += Time.deltaTime;	
+			attackTimeElapsed += Time.deltaTime;
 
 
 
-		if (colorTimeElapsed >= colorChangeDelay) {
-			LetterColorChange ();
-			colorTimeElapsed = 0;
-		}
+			if (colorTimeElapsed >= colorChangeDelay) {
+				LetterColorChange ();
+				colorTimeElapsed = 0;
+			}
 
-		//Attack processing
-		if (!inSlam && !inCharge) {
-			if (Input.GetButtonDown ("FireD")) {
-				Debug.Log ("FireD button pressed, size = " + size + "atkType = " + atkType);
-				if (atkType == attackType.Spike) {
-					if (size > spikeSizeCost) {
+			//Attack processing
+			if (!inSlam && !inCharge) {
+				if (Input.GetButtonDown ("FireD")) {
+					Debug.Log ("FireD button pressed, size = " + size + "atkType = " + atkType);
+					if (atkType == attackType.Spike) {
+						if (size > spikeSizeCost) {
 //						firingSpike = true; // set that we're firing a spike
-						decSize (spikeSizeCost); 
-						fireSpike();
+							decSize (spikeSizeCost); 
+							fireSpike ();
+						} 
+					} else if (atkType == attackType.Charge && size > chargeSizeCost) {
+						startCharge ();
+//					setIsInSuperModeTrue();
 					} 
-				} else if (atkType == attackType.Charge && size > chargeSizeCost) {
-					startCharge ();
+				} else if (Input.GetButtonDown ("FireA")) {
+					Debug.Log ("FireA button pressed, size = " + size + "atkType = " + atkType);
+					if (atkType == attackType.Slam && size > slamSizeCost) {
+						startSlam ();
 //					setIsInSuperModeTrue();
-				} 
-			} else if (Input.GetButtonDown ("FireA")) {
-				Debug.Log ("FireA button pressed, size = " + size + "atkType = " + atkType);
-				if (atkType == attackType.Slam && size > slamSizeCost) {
-					startSlam ();
-//					setIsInSuperModeTrue();
+					}
 				}
-			}
-			//Cooldowns
-			if (atkType == attackType.Slam) {
-				if (attackTimeElapsed >= slamAvailableTime) {
-					attackTimeElapsed = 0f;
-					changeAttackType (attackType.Spike);
+				//Cooldowns
+				if (atkType == attackType.Slam) {
+					if (attackTimeElapsed >= slamAvailableTime) {
+						attackTimeElapsed = 0f;
+						changeAttackType (attackType.Spike);
 //					setIsInSuperModeFalse();
-				}
-			} else if (atkType == attackType.Charge) {
-				if (attackTimeElapsed >= chargeAvailableTime) {
-					attackTimeElapsed = 0f;
-					changeAttackType (attackType.Spike);
+					}
+				} else if (atkType == attackType.Charge) {
+					if (attackTimeElapsed >= chargeAvailableTime) {
+						attackTimeElapsed = 0f;
+						changeAttackType (attackType.Spike);
 //					setIsInSuperModeFalse();
+					}
 				}
 			}
 		}
-
 	}
 
 
